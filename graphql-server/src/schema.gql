@@ -26,6 +26,7 @@ type Query {
 
 type Mutation {
   create(CreateUserDTO: CreateUserDTO!): User!
+  removeUser(id: Int!): Boolean!
   createPet(createPetInput: CreatePetInput!): Pet!
   updatePet(updatePetInput: UpdatePetInput!): Pet!
   removePet(id: Int!): Pet!

@@ -21,8 +21,9 @@ export class UsersResolver {
   getOne(@Args('id', { type: () => Int }) id: number): Promise<User> {
     return this.userService.findOne(id);
   }
-  // @ResolveField()
-  // pets(@Parent() user: User): Promise<Pet[]> {
-  //   return this.userService.
-  // }
+
+  @Mutation((returns) => Boolean)
+  removeUser(@Args('id', { type: () => Int }) id: number) {
+    return this.userService.remove(id);
+  }
 }
