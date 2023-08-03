@@ -12,6 +12,7 @@ import {
 } from "./components/ui/table";
 
 import { useForm } from "react-hook-form";
+import { MdDeleteOutline } from "react-icons/md";
 import { Button } from "./components/ui/button";
 import {
   Form,
@@ -45,9 +46,19 @@ const ADD_USER = gql`
   }
 `;
 
+const DELETE_USER = gql`
+  mutation DeleteUser($id: Int!) {
+    removeUser(id: $id)
+  }
+`;
+
 function App() {
   const { data } = useQuery(GET_USERS);
   const [addUser, { error }] = useMutation(ADD_USER, {
+    refetchQueries: [GET_USERS],
+  });
+
+  const [removeUser] = useMutation(DELETE_USER, {
     refetchQueries: [GET_USERS],
   });
 
@@ -129,7 +140,8 @@ function App() {
             <TableHead className="w-[100px]">Id</TableHead>
             <TableHead>FistName</TableHead>
             <TableHead>LastName</TableHead>
-            <TableHead className="text-right">Age</TableHead>
+            <TableHead>Age</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -138,7 +150,13 @@ function App() {
               <TableCell className="font-medium">{user.id}</TableCell>
               <TableCell>{user.firstName}</TableCell>
               <TableCell>{user.lastName}</TableCell>
-              <TableCell className="text-right">{user.age}</TableCell>
+              <TableCell>{user.age}</TableCell>
+              <TableCell>
+                <MdDeleteOutline
+                  className="hover:cursor-pointer"
+                  onClick={() => removeUser({ variables: { id: user.id } })}
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
